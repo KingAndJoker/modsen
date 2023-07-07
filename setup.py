@@ -15,4 +15,3 @@ def setup(app: web.Application) -> None:
     """ setup web application """
 
     setup_db(app)
-    pass
