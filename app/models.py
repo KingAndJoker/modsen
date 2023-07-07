@@ -23,6 +23,11 @@ class Rubrics(Base):
     """ Rubrics model """
     __tablename__ = 'rubrics'
 
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
     document_id: Mapped[int] = mapped_column(ForeignKey('documents.id'))
     rubrics: Mapped[str] = mapped_column(String(40))
 
@@ -33,6 +38,9 @@ class Document(Base):
     __tablename__ = 'documents'
 
     id: Mapped[int] = mapped_column(
-        Integer, primary_key=True, autoincrement=True)
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
     text: Mapped[str] = mapped_column(Text)
     created_date: [datetime.datetime] = mapped_column(DateTime)
