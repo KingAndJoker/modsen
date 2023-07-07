@@ -43,4 +43,4 @@ class Document(Base):
         autoincrement=True
     )
     text: Mapped[str] = mapped_column(Text)
-    created_date: [datetime.datetime] = mapped_column(DateTime)
+    created_date: Mapped[datetime.datetime] = mapped_column(DateTime)
