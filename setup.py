@@ -6,6 +6,8 @@ from app.models import Base
 
 
 def setup_db(app: web.Application) -> None:
+    """ setup database """
+
     engine = create_engine("sqlite:///database.db", echo=False)
     app['engine'] = engine
     Base.metadata.create_all(engine)
