@@ -14,6 +14,7 @@ from app.models import (
     Rubric,
     Document
 )
+from app.api import routes as routes_api
 
 
 def seeding(engine: Engine) -> None:
@@ -56,7 +57,7 @@ def setup_db(app: web.Application) -> None:
 def setup_routes(app: web.Application) -> None:
     """ setup routes """
 
-    pass
+    app.add_routes(routes_api)
 
 
 def setup(app: web.Application) -> None:
