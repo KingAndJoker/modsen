@@ -18,7 +18,7 @@ from app.models import (
 
 def seeding(engine: Engine) -> None:
     """ sedding database """
-    
+
     with Session(engine) as session:
         with open('posts.csv', encoding='utf-8') as csv_file:
             spamreader = csv.DictReader(csv_file, delimiter=',', quotechar='"')
@@ -49,6 +49,12 @@ def setup_db(app: web.Application) -> None:
 
     if required_seeding:
         seeding(engine)
+
+
+def setup_routes(app: web.Application) -> None:
+    """ setup routes """
+
+    pass
 
 
 def setup(app: web.Application) -> None:
