@@ -61,7 +61,7 @@ class Document(Base):
     created_date: Mapped[datetime.datetime] = mapped_column(DateTime)
 
     rubrics: Mapped[list[Rubric]] = relationship(
-        'Rubrics', back_populates='document')
+        'Rubric', back_populates='document')
 
     def __init__(self,
                  id: int = None,
