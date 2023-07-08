@@ -50,6 +50,8 @@ def setup_db(app: web.Application) -> None:
     if required_seeding:
         seeding(engine)
 
+    app['session'] = Session(engine)
+
 
 def setup_routes(app: web.Application) -> None:
     """ setup routes """
