@@ -131,11 +131,12 @@ class Search(web.View):
         status = 200
 
         text = params.get('text', '')
+        top = int(params.get('top', 20))
 
         documents = session.query(Document). \
             filter(Document.text.ilike(f'%{text}%')). \
             order_by(Document.created_date.desc()). \
-            limit(20). \
+            limit(top). \
             all()
 
         for i in range(len(documents)):
