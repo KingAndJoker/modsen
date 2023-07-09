@@ -124,7 +124,7 @@ class Search(web.View):
         request: web.Request = self.request
         app: web.Application = request.app
         engine = app['engine']
-        session: Session = Session(engine)  # app['session']
+        session: Session = app['session']
         params = request.rel_url.query
         start_time = request['start_time']
         resp = {}
