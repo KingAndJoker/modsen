@@ -121,4 +121,36 @@ class Search(web.View):
     async def get(self):
         """ GET handler /api/search """
 
-        pass
+        request: web.Request = self.request
+        app: web.Application = request.app
+        engine = app['engine']
+        session: Session = Session(engine)  # app['session']
+        params = request.rel_url.query
+        start_time = request['start_time']
+        resp = {}
+        status = 200
+
+        text = params.get('text', '')
+
+        documents = session.query(Document). \
+            filter(Document.text.ilike(f'%{text}%')). \
+            order_by(Document.created_date.desc()). \
+            limit(20). \
+            all()
+
+        for i in range(len(documents)):
+            rubrics = documents[i].rubrics
+            rubrics = [rubric.__dict__ for rubric in rubrics]
+            for rubric in rubrics:
+                del rubric['_sa_instance_state']
+
+            documents[i] = documents[i].__dict__
+            documents[i]['created_date'] = str(documents[i]['created_date'])
+            del documents[i]['_sa_instance_state']
+            documents[i]['rubrics'] = rubrics
+
+        resp['documents'] = documents
+
+        resp['time'] = time.time() - start_time
+
+        return web.json_response(resp, status=status)
