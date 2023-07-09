@@ -2,9 +2,10 @@
 from aiohttp import web
 
 from setup import setup
+from app.middleware import middleware
 
 
-app: web.Application = web.Application()
+app: web.Application = web.Application(middlewares=[middleware])
 
 
 if __name__ == '__main__':
