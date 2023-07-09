@@ -45,8 +45,14 @@ class Document_Id(web.View):
                 resp['time'] = time.time() - start_time
                 return web.json_response(resp, status=status)
 
-            document = session.query(Document).filter(Document.id == id).one()
-            rubrics = document.rubrics
+            document = session.query(Document).filter(Document.id == id).one_or_none()
+            rubrics = document.rubrics if document is not None else None
+
+            if document is None:
+                resp['error'] = 'item not found'
+                status = 404
+                resp['time'] = time.time() - start_time
+                return web.json_response(resp, status=status)
 
             document = document.__dict__
             del document['_sa_instance_state']
