@@ -1,4 +1,6 @@
 """ API file """
+import time
+
 from aiohttp import web
 from sqlalchemy.orm import Session
 
@@ -24,6 +26,7 @@ class Document_Id(web.View):
         app: web.Application = request.app
         engine = app['engine']
         session: Session = Session(engine) # app['session']
+        start_time = request['start_time']
         resp = {}
         status = 200
 
@@ -36,6 +39,7 @@ class Document_Id(web.View):
                 print(err.with_traceback)
                 resp['error'] = 'id="{id}" is not correct'
                 status = 400
+                resp['time'] = time.time() - start_time
                 return web.json_response(resp, status=status)
 
             document = session.query(Document).filter(Document.id == id).one()
@@ -55,4 +59,5 @@ class Document_Id(web.View):
             status = 400
             resp['error'] = 'missing id'
 
+        resp['time'] = time.time() - start_time
         return web.json_response(resp, status=status)
