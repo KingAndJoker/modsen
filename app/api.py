@@ -4,7 +4,10 @@ import time
 from aiohttp import web
 from sqlalchemy.orm import Session
 
-from app.models import Document
+from app.models import (
+    Document,
+    Rubric
+)
 
 
 routes = web.RouteTableDef()
@@ -25,7 +28,7 @@ class Document_Id(web.View):
         request: web.Request = self.request
         app: web.Application = request.app
         engine = app['engine']
-        session: Session = Session(engine) # app['session']
+        session: Session = Session(engine)  # app['session']
         start_time = request['start_time']
         resp = {}
         status = 200
@@ -50,11 +53,47 @@ class Document_Id(web.View):
             document['created_date'] = str(document['created_date'])
 
             document['rubrics'] = rubrics
-            document['rubrics'] = [rubric.__dict__ for rubric in document['rubrics']]
+            document['rubrics'] = [
+                rubric.__dict__ for rubric in document['rubrics']]
             for rubric in document['rubrics']:
                 del rubric['_sa_instance_state']
 
             resp['document'] = document
+        else:
+            status = 400
+            resp['error'] = 'missing id'
+
+        resp['time'] = time.time() - start_time
+        return web.json_response(resp, status=status)
+
+    async def delete(self) -> web.Response:
+        """ DELETE handler /api/document/{id} """
+
+        request: web.Request = self.request
+        app: web.Application = request.app
+        engine = app['engine']
+        session: Session = Session(engine)  # app['session']
+        start_time = request['start_time']
+        resp = {}
+        status = 200
+
+        id = request.match_info.get('id', None)
+
+        if id is not None:
+            try:
+                id = int(id)
+            except TypeError as err:
+                print(err.with_traceback)
+                resp['error'] = 'id="{id}" is not correct'
+                status = 400
+                resp['time'] = time.time() - start_time
+                return web.json_response(resp, status=status)
+
+            session.query(Rubric).filter(Rubric.document_id == id).delete()
+            session.query(Document).filter(Document.id == id).delete()
+            session.commit()
+
+            resp['status'] = 'Deletion completed successfully'
         else:
             status = 400
             resp['error'] = 'missing id'
