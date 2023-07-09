@@ -20,6 +20,7 @@ class Document_Id(web.View):
     GET /api/document/{id} - return JSON document
     if {id} miss return error
 
+    DELETE /api/document/{id} - remove document with id
     """
 
     async def get(self) -> web.Response:
@@ -45,7 +46,8 @@ class Document_Id(web.View):
                 resp['time'] = time.time() - start_time
                 return web.json_response(resp, status=status)
 
-            document = session.query(Document).filter(Document.id == id).one_or_none()
+            document = session.query(Document).filter(
+                Document.id == id).one_or_none()
             rubrics = document.rubrics if document is not None else None
 
             if document is None:
@@ -106,3 +108,17 @@ class Document_Id(web.View):
 
         resp['time'] = time.time() - start_time
         return web.json_response(resp, status=status)
+
+
+@routes.view('/api/search')
+class Search(web.View):
+    """
+    Search handler
+    GET /api/search?text=...
+    search text in documents and return top 20, order by date
+    """
+
+    async def get(self):
+        """ GET handler /api/search """
+
+        pass
