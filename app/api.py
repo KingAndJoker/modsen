@@ -14,7 +14,7 @@ routes = web.RouteTableDef()
 
 
 @routes.view('/api/document/{id}')
-class Document_Id(web.View):
+class DocumentId(web.View):
     """
     Document handler
     GET /api/document/{id} - return JSON document
