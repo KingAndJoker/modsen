@@ -9,10 +9,18 @@ from sqlalchemy import (
     String,
     DateTime
 )
+from sqlalchemy import Table
+from sqlalchemy import Column
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
+
+
+documentsRubircs = Table('documents_rubrics',
+                         Column('document_id', ForeignKey('documents.id')),
+                         Column('rubric_id', ForeignKey('rubrics.id'))
+                         )
 
 
 class Base(DeclarativeBase):
@@ -24,6 +32,7 @@ class Base(DeclarativeBase):
 
 class Rubric(Base):
     """ Rubrics model """
+    
     __tablename__ = 'rubrics'
 
     id: Mapped[int] = mapped_column(
@@ -35,7 +44,10 @@ class Rubric(Base):
     rubric: Mapped[str] = mapped_column(String(40))
 
     document: Mapped['Document'] = relationship(
-        'Document', back_populates='rubrics')
+        'Document',
+        secondary=documentsRubircs,
+        back_populates='rubrics'
+    )
 
     def __init__(self, id: int = None,
                  document_id: int = None,
@@ -61,7 +73,10 @@ class Document(Base):
     created_date: Mapped[datetime.datetime] = mapped_column(DateTime)
 
     rubrics: Mapped[list[Rubric]] = relationship(
-        'Rubric', back_populates='document')
+        'Rubric',
+        secondary=documentsRubircs,
+        back_populates='document'
+    )
 
     def __init__(self,
                  id: int = None,
