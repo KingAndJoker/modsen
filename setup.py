@@ -18,7 +18,7 @@ from app.api import routes as routes_api
 
 
 def seeding(engine: Engine) -> None:
-    """ sedding database """
+    """ seeding database """
 
     with Session(engine) as session:
         with open('posts.csv', encoding='utf-8') as csv_file:
