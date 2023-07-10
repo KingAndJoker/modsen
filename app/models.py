@@ -41,7 +41,6 @@ class Rubric(Base):
         primary_key=True,
         autoincrement=True
     )
-    # document_id: Mapped[int] = mapped_column(ForeignKey('documents.id'))
     rubric: Mapped[str] = mapped_column(String(40))
 
     documents: Mapped[list['Document']] = relationship(
