@@ -39,7 +39,7 @@ class Document_Id(web.View):
         if id is not None:
             try:
                 id = int(id)
-            except TypeError as err:
+            except ValueError as err:
                 print(err.with_traceback)
                 resp['error'] = 'id="{id}" is not correct'
                 status = 400
@@ -90,7 +90,7 @@ class Document_Id(web.View):
         if id is not None:
             try:
                 id = int(id)
-            except TypeError as err:
+            except ValueError as err:
                 print(err.with_traceback)
                 resp['error'] = 'id="{id}" is not correct'
                 status = 400
