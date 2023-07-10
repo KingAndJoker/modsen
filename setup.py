@@ -27,7 +27,13 @@ def seeding(engine: Engine) -> None:
                 text = row['text']
                 created = datetime.datetime.fromisoformat(row['created_date'])
                 rubrics = literal_eval(row['rubrics'])
-                rubrics = [Rubric(rubric=rubric) for rubric in rubrics]
+                for i, rubric in enumerate(rubrics):
+                    r = session.query(Rubric). \
+                        filter(Rubric.rubric == rubric). \
+                        one_or_none()
+                    if r is None:
+                        r = Rubric(rubric=rubric)
+                    rubrics[i] = r
 
                 document = Document(
                     text=text,
