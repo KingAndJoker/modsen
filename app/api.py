@@ -43,7 +43,6 @@ class DocumentId(web.View):
                 print(err.with_traceback)
                 resp['error'] = 'id="{id}" is not correct'
                 status = 400
-                resp['time'] = time.time() - start_time
                 return web.json_response(resp, status=status)
 
             document = session.query(Document).filter(
@@ -53,7 +52,6 @@ class DocumentId(web.View):
             if document is None:
                 resp['error'] = 'item not found'
                 status = 404
-                resp['time'] = time.time() - start_time
                 return web.json_response(resp, status=status)
 
             document = document.__dict__
@@ -71,7 +69,6 @@ class DocumentId(web.View):
             status = 400
             resp['error'] = 'missing id'
 
-        resp['time'] = time.time() - start_time
         return web.json_response(resp, status=status)
 
     async def delete(self) -> web.Response:
@@ -94,7 +91,6 @@ class DocumentId(web.View):
                 print(err.with_traceback)
                 resp['error'] = 'id="{id}" is not correct'
                 status = 400
-                resp['time'] = time.time() - start_time
                 return web.json_response(resp, status=status)
 
             session.query(Rubric).filter(Rubric.document_id == id).delete()
@@ -106,7 +102,6 @@ class DocumentId(web.View):
             status = 400
             resp['error'] = 'missing id'
 
-        resp['time'] = time.time() - start_time
         return web.json_response(resp, status=status)
 
 
@@ -151,7 +146,5 @@ class Search(web.View):
             documents[i]['rubrics'] = rubrics
 
         resp['documents'] = documents
-
-        resp['time'] = time.time() - start_time
 
         return web.json_response(resp, status=status)
