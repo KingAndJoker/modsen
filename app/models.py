@@ -17,12 +17,6 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
 
 
-documentsRubircs = Table('documents_rubrics',
-                         Column('document_id', ForeignKey('documents.id')),
-                         Column('rubric_id', ForeignKey('rubrics.id'))
-                         )
-
-
 class Base(DeclarativeBase):
     """ Base class """
 
@@ -30,9 +24,16 @@ class Base(DeclarativeBase):
         super().__init__(**kw)
 
 
+documentsRubircs = Table('documents_rubrics',
+                         Base.metadata,
+                         Column('document_id', ForeignKey('documents.id')),
+                         Column('rubric_id', ForeignKey('rubrics.id'))
+                         )
+
+
 class Rubric(Base):
     """ Rubrics model """
-    
+
     __tablename__ = 'rubrics'
 
     id: Mapped[int] = mapped_column(
@@ -40,10 +41,10 @@ class Rubric(Base):
         primary_key=True,
         autoincrement=True
     )
-    document_id: Mapped[int] = mapped_column(ForeignKey('documents.id'))
+    # document_id: Mapped[int] = mapped_column(ForeignKey('documents.id'))
     rubric: Mapped[str] = mapped_column(String(40))
 
-    document: Mapped['Document'] = relationship(
+    document: Mapped[list['Document']] = relationship(
         'Document',
         secondary=documentsRubircs,
         back_populates='rubrics'
