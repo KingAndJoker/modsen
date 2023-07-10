@@ -44,7 +44,7 @@ class Rubric(Base):
     # document_id: Mapped[int] = mapped_column(ForeignKey('documents.id'))
     rubric: Mapped[str] = mapped_column(String(40))
 
-    document: Mapped[list['Document']] = relationship(
+    documents: Mapped[list['Document']] = relationship(
         'Document',
         secondary=documentsRubircs,
         back_populates='rubrics'
@@ -76,7 +76,7 @@ class Document(Base):
     rubrics: Mapped[list[Rubric]] = relationship(
         'Rubric',
         secondary=documentsRubircs,
-        back_populates='document'
+        back_populates='documents'
     )
 
     def __init__(self,
