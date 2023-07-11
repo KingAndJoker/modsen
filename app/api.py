@@ -61,15 +61,8 @@ class DocumentId(web.View):
                 status = 404
                 return web.json_response(resp, status=status)
 
-            document = document.__dict__
-            del document['_sa_instance_state']
+            document = dict(document)
             document['created_date'] = str(document['created_date'])
-
-            document['rubrics'] = rubrics
-            document['rubrics'] = [
-                rubric.__dict__ for rubric in document['rubrics']]
-            for rubric in document['rubrics']:
-                del rubric['_sa_instance_state']
 
             resp['document'] = document
         else:
@@ -134,16 +127,9 @@ class Search(web.View):
             limit(top). \
             all()
 
-        for i in range(len(documents)):
-            rubrics = documents[i].rubrics
-            rubrics = [rubric.__dict__ for rubric in rubrics]
-            for rubric in rubrics:
-                del rubric['_sa_instance_state']
-
-            documents[i] = documents[i].__dict__
-            documents[i]['created_date'] = str(documents[i]['created_date'])
-            del documents[i]['_sa_instance_state']
-            documents[i]['rubrics'] = rubrics
+        documents = [dict(document) for document in documents]
+        for document in documents:
+            document['created_date'] = str(document['created_date'])
 
         resp['documents'] = documents
 
