@@ -2,6 +2,7 @@
 import time
 
 from aiohttp import web
+from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
 from app.models import (
@@ -11,6 +12,15 @@ from app.models import (
 
 
 routes = web.RouteTableDef()
+
+
+def get_config(request: web.Request) -> tuple[web.Application, Engine, Session]:
+    """ extracts from request and returns application, engine, session """
+
+    app: web.Application = request.app
+    engine = app['engine']
+    session: Session = Session(engine)  # app['session']
+    return (app, engine, session)
 
 
 @routes.view('/api/document/{id}')
@@ -27,9 +37,7 @@ class DocumentId(web.View):
         """ GET handler /api/document/{id} """
 
         request: web.Request = self.request
-        app: web.Application = request.app
-        engine = app['engine']
-        session: Session = Session(engine)  # app['session']        
+        app, engine, session = get_config(request)
         resp = {}
         status = 200
 
@@ -74,9 +82,7 @@ class DocumentId(web.View):
         """ DELETE handler /api/document/{id} """
 
         request: web.Request = self.request
-        app: web.Application = request.app
-        engine = app['engine']
-        session: Session = Session(engine)  # app['session']
+        app, engine, session = get_config(request)
         resp = {}
         status = 200
 
@@ -91,7 +97,6 @@ class DocumentId(web.View):
                 status = 400
                 return web.json_response(resp, status=status)
 
-            session.query(Rubric).filter(Rubric.document_id == id).delete()
             session.query(Document).filter(Document.id == id).delete()
             session.commit()
 
@@ -115,9 +120,7 @@ class Search(web.View):
         """ GET handler /api/search """
 
         request: web.Request = self.request
-        app: web.Application = request.app
-        engine = app['engine']
-        session: Session = app['session']
+        app, engine, session = get_config(request)
         params = request.rel_url.query
         resp = {}
         status = 200
