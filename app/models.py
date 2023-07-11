@@ -58,6 +58,10 @@ class Rubric(Base):
         self.document_id = document_id
         self.rubric = rubric
 
+    def __iter__(self):
+        yield 'id', self.id
+        yield 'rubric', self.rubric
+
 
 class Document(Base):
     """ Document model """
@@ -89,3 +93,9 @@ class Document(Base):
         self.text = text
         self.created_date = created_date
         self.rubrics = rubrics
+
+    def __iter__(self):
+        yield 'id', self.id
+        yield 'text', self.text
+        yield 'created_date', self.created_date
+        yield 'rubrics', [dict(rubric) for rubric in self.rubrics]
