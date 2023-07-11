@@ -126,9 +126,9 @@ class Search(web.View):
             limit(top). \
             all()
 
-        documents = [dict(document) for document in documents]
-        for document in documents:
-            document['created_date'] = str(document['created_date'])
+        for i, document in enumerate(documents):
+            documents[i] = dict(documents[i])
+            documents[i]['created_date'] = str(documents[i]['created_date'])
 
         resp['documents'] = documents
 
