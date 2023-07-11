@@ -29,8 +29,7 @@ class DocumentId(web.View):
         request: web.Request = self.request
         app: web.Application = request.app
         engine = app['engine']
-        session: Session = Session(engine)  # app['session']
-        start_time = request['start_time']
+        session: Session = Session(engine)  # app['session']        
         resp = {}
         status = 200
 
@@ -78,7 +77,6 @@ class DocumentId(web.View):
         app: web.Application = request.app
         engine = app['engine']
         session: Session = Session(engine)  # app['session']
-        start_time = request['start_time']
         resp = {}
         status = 200
 
@@ -121,7 +119,6 @@ class Search(web.View):
         engine = app['engine']
         session: Session = app['session']
         params = request.rel_url.query
-        start_time = request['start_time']
         resp = {}
         status = 200
 
