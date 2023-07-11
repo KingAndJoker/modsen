@@ -54,7 +54,6 @@ class DocumentId(web.View):
 
             document = session.query(Document).filter(
                 Document.id == id).one_or_none()
-            rubrics = document.rubrics if document is not None else None
 
             if document is None:
                 resp['error'] = 'item not found'
