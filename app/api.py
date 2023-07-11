@@ -90,7 +90,6 @@ class DocumentId(web.View):
                 status = 400
                 return web.json_response(resp, status=status)
 
-            session.query(documentsRubircs).filter(documentsRubircs.c.document_id == id).delete()
             session.query(Document).filter(Document.id == id).delete()
             session.commit()
 

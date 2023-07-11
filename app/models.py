@@ -26,7 +26,7 @@ class Base(DeclarativeBase):
 
 documentsRubircs = Table('documents_rubrics',
                          Base.metadata,
-                         Column('document_id', ForeignKey('documents.id')),
+                         Column('document_id', ForeignKey('documents.id', ondelete='CASCADE')),
                          Column('rubric_id', ForeignKey('rubrics.id'))
                          )
 
@@ -79,7 +79,8 @@ class Document(Base):
     rubrics: Mapped[list[Rubric]] = relationship(
         'Rubric',
         secondary=documentsRubircs,
-        back_populates='documents'
+        back_populates='documents',
+        cascade='all, delete'
     )
 
     def __init__(self,
