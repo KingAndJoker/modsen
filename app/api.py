@@ -56,7 +56,7 @@ class DocumentId(web.View):
             document = session.query(Document).filter(
                 Document.id == id).one_or_none()
 
-            if document is None:
+            if not document:
                 resp['error'] = 'item not found'
                 status = 404
                 return web.json_response(resp, status=status)
