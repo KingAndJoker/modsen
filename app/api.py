@@ -21,7 +21,7 @@ def get_config(request: web.Request) -> tuple[web.Application, Engine, Session]:
     app: web.Application = request.app
     engine = app['engine']
     session: Session = Session(engine)  # app['session']
-    return (app, engine, session)
+    return app, engine, session
 
 
 @routes.view('/api/document/{id}')
