@@ -41,7 +41,7 @@ class DocumentId(web.View):
 
         id = request.match_info.get('id', None)
 
-        if id is not None:
+        if id:
             try:
                 id = int(id)
             except ValueError as err:
