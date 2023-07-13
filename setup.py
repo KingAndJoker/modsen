@@ -11,14 +11,15 @@ from app.schema import (
 )
 
 
-def setup_db(app: web.Application) -> None:
+def setup_db(app: web.Application, url_database: str = None, echo: bool = False) -> None:
     """ setup database """
 
     env: Env = app['env']
-    url_database = f'{env("DIALECT_DATABASE")}+{env("DRIVER_DATABASE")}://' \
-                   f'{env("USERNAME_DATABASE")}:{env("PASSWORD_DATABASE")}@' \
-                   f'{env("HOST_DATABASE")}:{env("PORT_DATABASE")}'
-    engine = create_engine(url_database, echo=False)
+    if url_database is None:
+        url_database = f'{env("DIALECT_DATABASE")}+{env("DRIVER_DATABASE")}://' \
+                       f'{env("USERNAME_DATABASE")}:{env("PASSWORD_DATABASE")}@' \
+                       f'{env("HOST_DATABASE")}:{env("PORT_DATABASE")}'
+    engine = create_engine(url_database, echo=echo)
     app['engine'] = engine
     Base.metadata.create_all(engine)
 
@@ -38,12 +39,12 @@ def setup_schema(app) -> None:
     app['document_schema'] = document_schema
 
 
-def setup(app: web.Application) -> None:
+def setup(app: web.Application, **kw) -> None:
     """ setup web application """
 
     env = Env()
     env.read_env()
     app['env'] = env
-    setup_db(app)
+    setup_db(app, **kw)
     setup_routes(app)
     setup_schema(app)
