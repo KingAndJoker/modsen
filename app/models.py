@@ -24,6 +24,7 @@ class Base(DeclarativeBase):
         super().__init__(**kw)
 
 
+# TODO: misspell
 documentsRubircs = Table('documents_rubrics',
                          Base.metadata,
                          Column('document_id', ForeignKey('documents.id', ondelete='CASCADE')),
