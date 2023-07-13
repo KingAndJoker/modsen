@@ -1,22 +1,38 @@
 """ unit test /api/document/{id} """
-import unittest
+import sys
+sys.path.insert(1, './../')
 
-import requests
+from aiohttp import web
+from aiohttp.test_utils import AioHTTPTestCase
+
+from setup import setup
+from seeding import seeding
 
 
-class TestDocumentDelete(unittest.TestCase):
+class TestDocumentDelete(AioHTTPTestCase):
     """ TEST: delete document with specified id=5 """
 
-    def test_delete_document(self):
+    async def get_application(self):
+        """
+        Override the get_app method to return your application.
+        """
+
+        app = web.Application()
+        setup(app, url_database='sqlite://')
+        seeding(app['engine'], path_to_csv='./../posts.csv')
+
+        return app
+
+    async def test_delete_document(self):
         """ test delete document """
 
-        resp = requests.delete('http://localhost:8080/api/document/415')
-        self.assertEqual(resp.status_code, 200)
-        resp = requests.get('http://localhost:8080/api/document/415')
-        self.assertEqual(resp.status_code, 404)
+        async with self.client.request("DELETE", "/api/document/415") as resp:
+            self.assertEqual(resp.status, 200)
+        async with self.client.request("GET", "/api/document/415") as resp:
+            self.assertEqual(resp.status, 404)
 
-    def test_error_400(self):
+    async def test_error_400(self):
         """ test status code=400 """
 
-        resp = requests.delete('http://localhost:8080/api/document/zxc')
-        self.assertEqual(resp.status_code, 400)
+        async with self.client.request("DELETE", "/api/document/zxc") as resp:
+            self.assertEqual(resp.status, 400)
