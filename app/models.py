@@ -50,12 +50,10 @@ class Rubric(Base):
     )
 
     def __init__(self, id: int = None,
-                 document_id: int = None,
                  rubric: str = None,
                  **kw: Any):
         super().__init__(**kw)
         self.id = id
-        self.document_id = document_id
         self.rubric = rubric
 
     def __iter__(self):
