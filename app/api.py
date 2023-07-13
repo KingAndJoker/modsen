@@ -5,23 +5,20 @@ from aiohttp import web
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 
-from app.models import (
-    Document,
-    Rubric,
-    documentsRubircs
-)
-
+from app.models import Document
+from app.schema import DocumentSchema
 
 routes = web.RouteTableDef()
 
 
-def get_config(request: web.Request) -> tuple[web.Application, Engine, Session]:
+def get_config(request: web.Request) -> tuple[web.Application, Engine, Session, DocumentSchema]:
     """ extracts from request and returns application, engine, session """
 
     app: web.Application = request.app
     engine = app['engine']
     session: Session = Session(engine)  # app['session']
-    return app, engine, session
+    document_schema: DocumentSchema = app['document_schema']
+    return app, engine, session, document_schema
 
 
 @routes.view('/api/document/{id}')
@@ -38,7 +35,7 @@ class DocumentId(web.View):
         """ GET handler /api/document/{id} """
 
         request: web.Request = self.request
-        app, engine, session = get_config(request)
+        app, engine, session, document_schema = get_config(request)
         resp = {}
         status = 200
 
@@ -61,10 +58,7 @@ class DocumentId(web.View):
                 status = 404
                 return web.json_response(resp, status=status)
 
-            document = dict(document)
-            document['created_date'] = str(document['created_date'])
-
-            resp['document'] = document
+            resp['document'] = document_schema.dump(document)
         else:
             status = 400
             resp['error'] = 'missing id'
@@ -75,7 +69,7 @@ class DocumentId(web.View):
         """ DELETE handler /api/document/{id} """
 
         request: web.Request = self.request
-        app, engine, session = get_config(request)
+        app, engine, session, document_schema = get_config(request)
         resp = {}
         status = 200
 
@@ -113,7 +107,7 @@ class Search(web.View):
         """ GET handler /api/search """
 
         request: web.Request = self.request
-        app, engine, session = get_config(request)
+        app, engine, session, document_schema = get_config(request)
         params = request.rel_url.query
         resp = {}
         status = 200
@@ -127,9 +121,7 @@ class Search(web.View):
             limit(top). \
             all()
 
-        for i, document in enumerate(documents):
-            documents[i] = dict(documents[i])
-            documents[i]['created_date'] = str(documents[i]['created_date'])
+        documents = [document_schema.dump(document) for document in documents]
 
         resp['documents'] = documents
 
