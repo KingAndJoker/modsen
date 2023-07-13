@@ -1,5 +1,4 @@
 """ seeding file """
-import os
 import csv
 import datetime
 from ast import literal_eval
@@ -7,12 +6,13 @@ from ast import literal_eval
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Engine
+from environs import Env
 
 from app.models import (
-    Base,
     Rubric,
     Document
 )
+
 
 def seeding(engine: Engine) -> None:
     """ seeding database """
@@ -43,5 +43,10 @@ def seeding(engine: Engine) -> None:
 
 
 if __name__ == '__main__':
-    engine = create_engine("postgresql+psycopg2://modsen_practica:1@localhost:5432", echo=False)
+    env = Env()
+    env.read_env()
+    url = f'{env("DIALECT_DATABASE")}+{env("DRIVER_DATABASE")}://' \
+          f'{env("USERNAME_DATABASE")}:{env("PASSWORD_DATABASE")}@' \
+          f'{env("HOST_DATABASE")}:{env("PORT_DATABASE")}'
+    engine = create_engine(url, echo=False)
     seeding(engine)
