@@ -6,6 +6,9 @@ from environs import Env
 
 from app.models import Base
 from app.api import routes as routes_api
+from app.schema import (
+    DocumentSchema
+)
 
 
 def setup_db(app: web.Application) -> None:
@@ -28,6 +31,13 @@ def setup_routes(app: web.Application) -> None:
     app.add_routes(routes_api)
 
 
+def setup_schema(app) -> None:
+    """ setup schema """
+
+    document_schema = DocumentSchema()
+    app['document_schema'] = document_schema
+
+
 def setup(app: web.Application) -> None:
     """ setup web application """
 
@@ -36,3 +46,4 @@ def setup(app: web.Application) -> None:
     app['env'] = env
     setup_db(app)
     setup_routes(app)
+    setup_schema(app)
