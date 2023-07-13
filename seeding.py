@@ -14,11 +14,11 @@ from app.models import (
 )
 
 
-def seeding(engine: Engine) -> None:
+def seeding(engine: Engine, path_to_csv: str = 'posts.csv') -> None:
     """ seeding database """
 
     with Session(engine) as session:
-        with open('posts.csv', encoding='utf-8') as csv_file:
+        with open(path_to_csv, encoding='utf-8') as csv_file:
             spamreader = csv.DictReader(csv_file, delimiter=',', quotechar='"')
             for row in spamreader:
                 text = row['text']
