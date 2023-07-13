@@ -25,12 +25,12 @@ def seeding(engine: Engine) -> None:
                 created = datetime.datetime.fromisoformat(row['created_date'])
                 rubrics = literal_eval(row['rubrics'])
                 for i, rubric in enumerate(rubrics):
-                    r = session.query(Rubric). \
+                    db_rubric = session.query(Rubric). \
                         filter(Rubric.rubric == rubric). \
                         one_or_none()
-                    if r is None:
-                        r = Rubric(rubric=rubric)
-                    rubrics[i] = r
+                    if not db_rubric:
+                        db_rubric = Rubric(rubric=rubric)
+                    rubrics[i] = db_rubric
 
                 document = Document(
                     text=text,
