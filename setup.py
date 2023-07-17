@@ -10,17 +10,32 @@ from app.schema import DocumentSchema
 
 
 def setup_db(
-    app: web.Application, url_database: str = None, echo: bool = False
+    app: web.Application, echo: bool = False
 ) -> None:
     """setup database"""
 
     env: Env = app["env"]
-    if url_database is None:
-        url_database = (
-            f'{env("DIALECT_DATABASE")}+{env("DRIVER_DATABASE")}://'
-            f'{env("USERNAME_DATABASE")}:{env("PASSWORD_DATABASE")}@'
-            f'{env("HOST_DATABASE")}:{env("PORT_DATABASE")}'
-        )
+    DIALECT_DATABASE = env("DIALECT_DATABASE")
+    DRIVER_DATABASE = env("DRIVER_DATABASE")
+    USERNAME_DATABASE = env("USERNAME_DATABASE")
+    PASSWORD_DATABASE = env("PASSWORD_DATABASE")
+    HOST_DATABASE = env("HOST_DATABASE")
+    PORT_DATABASE = env("PORT_DATABASE")
+
+    url_database = f'{DIALECT_DATABASE}'
+    url_database += f'+{DRIVER_DATABASE}' if DRIVER_DATABASE else ''
+    url_database += '://'
+    url_database += (
+        f'{USERNAME_DATABASE}:{PASSWORD_DATABASE}@'
+        if USERNAME_DATABASE and PASSWORD_DATABASE
+        else ''
+    )
+    url_database += (
+        f'{HOST_DATABASE}:{PORT_DATABASE}'
+        if HOST_DATABASE and PORT_DATABASE
+        else ''
+    )
+
     engine = create_engine(url_database, echo=echo)
     app["engine"] = engine
     Base.metadata.create_all(engine)
@@ -41,11 +56,13 @@ def setup_schema(app) -> None:
     app["document_schema"] = document_schema
 
 
-def setup(app: web.Application, **kw) -> None:
+def setup(app: web.Application, env: Env=None, **kw) -> None:
     """setup web application"""
 
-    env = Env()
-    env.read_env()
+    if env is None:
+        env = Env()
+        env.read_env()
+
     app["env"] = env
     setup_db(app, **kw)
     setup_routes(app)
