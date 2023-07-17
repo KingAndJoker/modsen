@@ -41,7 +41,7 @@ class DocumentId(web.View):
 
         request: web.Request = self.request
         app, engine, session, document_schema = get_config(request)
-        resp = {}
+        resp: dict = dict()
         status = 200
 
         id = request.match_info.get("id", None)
@@ -76,7 +76,7 @@ class DocumentId(web.View):
 
         request: web.Request = self.request
         app, engine, session, document_schema = get_config(request)
-        resp = {}
+        resp: dict = dict()
         status = 200
 
         id = request.match_info.get("id", None)
@@ -115,7 +115,7 @@ class Search(web.View):
         request: web.Request = self.request
         app, engine, session, document_schema = get_config(request)
         params = request.rel_url.query
-        resp = {}
+        resp: dict = dict()
         status = 200
 
         text = params.get("text", "")
