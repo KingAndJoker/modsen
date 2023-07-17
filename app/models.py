@@ -2,19 +2,9 @@
 import datetime
 from typing import Any
 
-from sqlalchemy import (
-    Text,
-    Integer,
-    ForeignKey,
-    String,
-    DateTime
-)
-from sqlalchemy import Table
-from sqlalchemy import Column
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import relationship
+from sqlalchemy import (Column, DateTime, ForeignKey, Integer, String, Table,
+                        Text)
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):

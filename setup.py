@@ -1,14 +1,12 @@
 """ setup file """
 from aiohttp import web
+from environs import Env
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from environs import Env
 
-from app.models import Base
 from app.api import routes as routes_api
-from app.schema import (
-    DocumentSchema
-)
+from app.models import Base
+from app.schema import DocumentSchema
 
 
 def setup_db(app: web.Application, url_database: str = None, echo: bool = False) -> None:

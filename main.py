@@ -1,9 +1,8 @@
 """ main file """
 from aiohttp import web
 
-from setup import setup
 from app.middleware import middleware
-
+from setup import setup
 
 app: web.Application = web.Application(middlewares=[middleware])
 

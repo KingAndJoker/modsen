@@ -1,12 +1,13 @@
 """ unit test /api/document/{id} """
 import sys
+
 sys.path.insert(1, './../')
 
 from aiohttp import web
 from aiohttp.test_utils import AioHTTPTestCase
 
-from setup import setup
 from seeding import seeding
+from setup import setup
 
 
 class TestDocumentDelete(AioHTTPTestCase):

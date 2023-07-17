@@ -1,10 +1,7 @@
 """ Schema file """
 from marshmallow import Schema, fields
 
-from app.models import (
-    Rubric,
-    Document
-)
+from app.models import Document, Rubric
 
 
 class RubricSchema(Schema):

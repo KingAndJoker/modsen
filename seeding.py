@@ -3,15 +3,12 @@ import csv
 import datetime
 from ast import literal_eval
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
-from sqlalchemy.engine import Engine
 from environs import Env
+from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session
 
-from app.models import (
-    Rubric,
-    Document
-)
+from app.models import Document, Rubric
 
 
 def seeding(engine: Engine, path_to_csv: str = 'posts.csv') -> None:
