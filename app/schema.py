@@ -5,22 +5,22 @@ from app.models import Document, Rubric
 
 
 class RubricSchema(Schema):
-    """ Rubric schema """
+    """Rubric schema"""
 
     class Meta:
         model = Rubric
-        fields = ('id', 'rubric')
+        fields = ("id", "rubric")
 
     id = fields.Int()
     rubric = fields.Str()
 
 
 class DocumentSchema(Schema):
-    """ Document schema """
+    """Document schema"""
 
     class Meta:
         model = Document
-        fields = ('id', 'text', 'created_date', 'rubrics')
+        fields = ("id", "text", "created_date", "rubrics")
         ordered = True
 
     id = fields.Int()
