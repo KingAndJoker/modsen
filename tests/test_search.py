@@ -5,6 +5,7 @@ sys.path.insert(1, "../")
 
 from aiohttp import web
 from aiohttp.test_utils import AioHTTPTestCase
+from environs import Env
 
 from seeding import seeding
 from setup import setup
@@ -18,9 +19,12 @@ class TestSearchGet(AioHTTPTestCase):
         Override the get_app method to return your application.
         """
 
+        env = Env()
+        env.read_env()
         app = web.Application()
-        setup(app, url_database="sqlite://")
+        setup(app, env=env)
         seeding(app["engine"], path_to_csv="./../posts.csv")
+        
         return app
 
     async def test_search(self):

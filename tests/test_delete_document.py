@@ -3,6 +3,7 @@ import sys
 
 sys.path.insert(1, "./../")
 
+from environs import Env
 from aiohttp import web
 from aiohttp.test_utils import AioHTTPTestCase
 
@@ -17,9 +18,11 @@ class TestDocumentDelete(AioHTTPTestCase):
         """
         Override the get_app method to return your application.
         """
-
+        
+        env = Env()
+        env.read_env()
         app = web.Application()
-        setup(app, url_database="sqlite://")
+        setup(app, env=env)
         seeding(app["engine"], path_to_csv="./../posts.csv")
 
         return app

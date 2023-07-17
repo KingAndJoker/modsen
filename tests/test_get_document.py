@@ -1,11 +1,14 @@
 """ unit test /api/document/{id} """
+import sys
+
+sys.path.insert(1, "../")
+
+from environs import Env
+
 from setup import setup
 from seeding import seeding
 from aiohttp.test_utils import AioHTTPTestCase
 from aiohttp import web
-import sys
-
-sys.path.insert(1, "../")
 
 
 class TestDocumentGet(AioHTTPTestCase):
@@ -16,8 +19,10 @@ class TestDocumentGet(AioHTTPTestCase):
         Override the get_app method to return your application.
         """
 
+        env = Env()
+        env.read_env()
         app = web.Application()
-        setup(app, url_database="sqlite://")
+        setup(app, env=env)
         seeding(app["engine"], path_to_csv="./../posts.csv")
 
         return app
