@@ -115,7 +115,6 @@ class Search(web.View):
         request: web.Request = self.request
         app, engine, session, document_schema = get_config(request)
         params = request.rel_url.query
-        resp: dict = dict()
         status = 200
 
         text = params.get("text", "")
@@ -131,6 +130,6 @@ class Search(web.View):
 
         documents = document_schema.dump(documents, many=True)
 
-        resp["documents"] = documents
+        resp: dict = {"documents": documents}
 
         return web.json_response(resp, status=status)
