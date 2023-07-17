@@ -39,6 +39,10 @@ class TestDocumentGet(AioHTTPTestCase):
                     "останусь собой и посмотрю, кто со мной остаётся!"
                 ),
             )
+            self.assertEqual(
+                resp_json["document"]["rubrics"][1]["rubric"],
+                "VK-38076190053"
+            )
 
     async def test_error_400(self):
         """test status code=400"""
