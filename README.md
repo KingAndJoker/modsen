@@ -67,7 +67,7 @@ docker run --name modsen_practica -p 5432:5432 -e POSTGRES_USER=modsen_practica 
 
 Для заполнение БД запустить файл `seeding.py`
 
-пример файла .env:
+пример файла `.env`:
 ```apacheconf
 DIALECT_DATABASE="postgresql"
 DRIVER_DATABASE="psycopg2"
@@ -75,6 +75,19 @@ USERNAME_DATABASE="modsen_practica"
 PASSWORD_DATABASE="1"
 HOST_DATABASE="localhost"
 PORT_DATABASE=5432
+```
+
+для тестов сделал отдельный `.env`, находящийся в `./tests/.env`
+
+пример:
+
+```apacheconf
+DIALECT_DATABASE="sqlite"
+DRIVER_DATABASE=""
+USERNAME_DATABASE=""
+PASSWORD_DATABASE=""
+HOST_DATABASE=""
+PORT_DATABASE=
 ```
 
 проверок на обработку ошибок не делал, но с минимальными требованиями приложение вроде справлялось без проблем
