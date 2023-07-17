@@ -129,7 +129,7 @@ class Search(web.View):
             .all()
         )
 
-        documents = [document_schema.dump(document) for document in documents]
+        documents = document_schema.dump(documents, many=True)
 
         resp["documents"] = documents
 
