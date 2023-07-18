@@ -48,9 +48,9 @@ def seeding_from_txt(engine: Engine, path: str = "documents.txt") -> None:
 
     with Session(engine) as session:
         with open(path, encoding="utf-8") as file:
-            for line in file:
-                document = document_schema.load(literal_eval(line))
-                session.add(document)
+            lists_of_doc = file.read()
+            documents = document_schema.load(literal_eval(lists_of_doc), many=True)
+            session.add_all(documents)
 
         session.commit()
 
