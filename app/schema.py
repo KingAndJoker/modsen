@@ -11,12 +11,12 @@ class RubricSchema(Schema):
         model = Rubric
         fields = ("id", "rubric")
 
-    id = fields.Int()
+    id = fields.Int(allow_none=True)
     rubric = fields.Str()
 
     @post_load
     def make_rubric(self, data, **kwargs):
-        """ return Ribric object """
+        """ return Rubric object """
 
         return Rubric(**data)
 
@@ -29,10 +29,10 @@ class DocumentSchema(Schema):
         fields = ("id", "text", "created_date", "rubrics")
         ordered = True
 
-    id = fields.Int()
+    id = fields.Int(allow_none=True)
     text = fields.Str()
     created_date = fields.DateTime()
-    rubrics = fields.Nested(RubricSchema(), many=True)
+    rubrics = fields.List(fields.Nested(RubricSchema()))
 
     @post_load
     def make_document(self, data, **kwargs):
