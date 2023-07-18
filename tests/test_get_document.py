@@ -23,8 +23,8 @@ class TestDocumentGet(AioHTTPTestCase):
         env.read_env()
         app = web.Application()
         setup(app, env=env)
-        # seeding_from_csv(app["engine"], path_to_csv="./../posts.csv")
-        seeding_from_txt(app["engine"], path="./../documents.txt")
+        seeding_from_csv(app["engine"], path_to_csv="./../posts.csv")
+        # seeding_from_txt(app["engine"], path="./../documents.txt")
 
 
         return app
