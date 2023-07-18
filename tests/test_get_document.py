@@ -45,6 +45,10 @@ class TestDocumentGet(AioHTTPTestCase):
                 resp_json["document"]["rubrics"][1]["rubric"],
                 "VK-38076190053"
             )
+            self.assertEqual(
+                resp_json["document"]["id"],
+                417
+            )
 
     async def test_error_400(self):
         """test status code=400"""
