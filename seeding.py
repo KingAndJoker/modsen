@@ -9,9 +9,10 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
 from app.models import Document, Rubric
+from app.schema import DocumentSchema, RubricSchema
 
 
-def seeding(engine: Engine, path_to_csv: str = "posts.csv") -> None:
+def seeding_from_csv(engine: Engine, path_to_csv: str = "posts.csv") -> None:
     """seeding database"""
 
     with Session(engine) as session:
@@ -40,6 +41,20 @@ def seeding(engine: Engine, path_to_csv: str = "posts.csv") -> None:
                 session.commit()
 
 
+def seeding_from_txt(engine: Engine, path: str = "documents.txt") -> None:
+    """ seeding from txt """
+
+    document_schema = DocumentSchema()
+
+    with Session(engine) as session:
+        with open(path, encoding="utf-8") as file:
+            for line in file:
+                document = document_schema.load(literal_eval(line))
+                session.add(document)
+
+        session.commit()
+
+
 if __name__ == "__main__":
     env = Env()
     env.read_env()
@@ -49,4 +64,4 @@ if __name__ == "__main__":
         f'{env("HOST_DATABASE")}:{env("PORT_DATABASE")}'
     )
     engine = create_engine(url, echo=False)
-    seeding(engine)
+    seeding_from_csv(engine)
