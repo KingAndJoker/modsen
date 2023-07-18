@@ -8,6 +8,7 @@ from app.models import Document, Rubric
 
 if __name__ == "__main__":
     file_out = open('documents.txt', 'w', encoding='utf-8')
+    file_out.write('[')
     documentSchema = DocumentSchema()
 
     with open("posts.csv", encoding="utf-8") as csv_file:
@@ -22,4 +23,6 @@ if __name__ == "__main__":
 
             document_serial = documentSchema.dump(document)
 
-            file_out.write(str(document_serial) + "\n")
+            file_out.write(str(document_serial) + ",")
+
+    file_out.write(']')
