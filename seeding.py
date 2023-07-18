@@ -10,35 +10,24 @@ from sqlalchemy.orm import Session
 
 from app.models import Document, Rubric
 from app.schema import DocumentSchema, RubricSchema
-
+import marshmallow
 
 def seeding_from_csv(engine: Engine, path_to_csv: str = "posts.csv") -> None:
     """seeding database"""
 
+    document_schema = DocumentSchema()
     with Session(engine) as session:
         with open(path_to_csv, encoding="utf-8") as csv_file:
-            spamreader = csv.DictReader(csv_file, delimiter=",", quotechar='"')
-            for row in spamreader:
-                text = row["text"]
-                created = datetime.datetime.fromisoformat(row["created_date"])
-                rubrics = literal_eval(row["rubrics"])
-                for i, rubric in enumerate(rubrics):
-                    db_rubric = (
-                        session.query(Rubric)
-                        .filter(Rubric.rubric == rubric)
-                        .one_or_none()
-                    )
-                    if not db_rubric:
-                        db_rubric = Rubric(rubric=rubric)
-                    rubrics[i] = db_rubric
-
-                document = Document(text=text,
-                                    created_date=created,
-                                    rubrics=rubrics
-                                    )
+            docs_dict = csv.DictReader(csv_file, delimiter=",", quotechar='"')
+            for row in docs_dict:
+                doc_dict = dict(row)
+                doc_dict['rubrics'] = literal_eval(doc_dict['rubrics'])
+                doc_dict['rubrics'] = [{'rubric': rubric} for rubric in doc_dict['rubrics']]
+                document = document_schema.load(doc_dict)
 
                 session.add(document)
-                session.commit()
+
+        session.commit()
 
 
 def seeding_from_txt(engine: Engine, path: str = "documents.txt") -> None:
