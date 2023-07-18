@@ -7,7 +7,7 @@ from environs import Env
 from aiohttp import web
 from aiohttp.test_utils import AioHTTPTestCase
 
-from seeding import seeding
+from seeding import seeding_from_csv, seeding_from_txt
 from setup import setup
 
 
@@ -23,7 +23,8 @@ class TestDocumentDelete(AioHTTPTestCase):
         env.read_env()
         app = web.Application()
         setup(app, env=env)
-        seeding(app["engine"], path_to_csv="./../posts.csv")
+        # seeding_from_csv(app["engine"], path_to_csv="./../posts.csv")
+        seeding_from_txt(app["engine"], path="./../documents.txt")
 
         return app
 

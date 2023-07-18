@@ -6,7 +6,7 @@ sys.path.insert(1, "../")
 from environs import Env
 
 from setup import setup
-from seeding import seeding
+from seeding import seeding_from_csv, seeding_from_txt
 from aiohttp.test_utils import AioHTTPTestCase
 from aiohttp import web
 
@@ -23,7 +23,9 @@ class TestDocumentGet(AioHTTPTestCase):
         env.read_env()
         app = web.Application()
         setup(app, env=env)
-        seeding(app["engine"], path_to_csv="./../posts.csv")
+        # seeding_from_csv(app["engine"], path_to_csv="./../posts.csv")
+        seeding_from_txt(app["engine"], path="./../documents.txt")
+
 
         return app
 
