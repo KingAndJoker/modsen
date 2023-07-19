@@ -1,5 +1,7 @@
 """ Schema file """
-from marshmallow import Schema, fields, post_load
+from ast import literal_eval
+
+from marshmallow import Schema, fields, post_load, validates, pre_load
 
 from app.models import Document, Rubric
 
@@ -32,8 +34,17 @@ class DocumentSchema(Schema):
     id = fields.Int(allow_none=True)
     text = fields.Str()
     created_date = fields.DateTime()
+    # rubrics = fields.Nested(RubricSchema(), many=True)
     rubrics = fields.List(fields.Nested(RubricSchema()))
 
+    @pre_load(pass_many=False)
+    def pre_make_document(self, data, **kwargs):
+        """ return data """
+        if isinstance(data['rubrics'], str):
+            data['rubrics'] = literal_eval(data['rubrics'])
+            data['rubrics'] = [{'rubric': rubric} for rubric in data['rubrics']]
+        return data
+    
     @post_load
     def make_document(self, data, **kwargs):
         """ return Document object """
