@@ -19,13 +19,8 @@ def seeding_from_csv(engine: Engine, path_to_csv: str = "posts.csv") -> None:
     with Session(engine) as session:
         with open(path_to_csv, encoding="utf-8") as csv_file:
             docs_dict = csv.DictReader(csv_file, delimiter=",", quotechar='"')
-            for row in docs_dict:
-                doc_dict = dict(row)
-                doc_dict['rubrics'] = literal_eval(doc_dict['rubrics'])
-                doc_dict['rubrics'] = [{'rubric': rubric} for rubric in doc_dict['rubrics']]
-                document = document_schema.load(doc_dict)
-
-                session.add(document)
+            documents = document_schema.load(docs_dict, many=True)
+            session.add_all(documents)
 
         session.commit()
 
