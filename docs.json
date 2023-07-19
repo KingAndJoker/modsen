@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "path": "/api/document/{id}",
+            "get": {
+                "summary": "вовзращает документ с заданным id",
+                "responses": [
+                    200,
+                    400,
+                    404
+                ]
+            },
+            "delete": {
+                "summary": "удаляет документ из базы данных с заданным id",
+                "responses": [
+                    200,
+                    400
+                ]
+            }
+        },
+        {
+            "path": "/api/search",
+            "get": {
+                "summary": "возвращает результат поиска",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "top",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
